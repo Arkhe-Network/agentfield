@@ -6,6 +6,48 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 <!-- changelog:entries -->
 
+## [0.1.85-rc.13] - 2026-05-29
+
+
+### Chores
+
+- Chore(deps): bump tmp (#596)
+
+Bumps the npm_and_yarn group with 1 update in the /control-plane/web/client directory: [tmp](https://github.com/raszi/node-tmp).
+
+
+Updates `tmp` from 0.2.5 to 0.2.7
+- [Changelog](https://github.com/raszi/node-tmp/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/raszi/node-tmp/compare/v0.2.5...v0.2.7)
+
+---
+updated-dependencies:
+- dependency-name: tmp
+  dependency-version: 0.2.7
+  dependency-type: indirect
+  dependency-group: npm_and_yarn
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com> (08cf645)
+
+- Chore(ci): track Docker Hub pulls in download stats gist (#592)
+
+The Update Download Stats workflow runs every 6 hours and snapshots
+binary / PyPI / npm cumulative counts into the badge gist. Docker Hub
+pulls were not captured, so the gist's `docker` field was always 0 and
+none of our analytics could reconstruct Docker history.
+
+Docker Hub only exposes a cumulative `pull_count` (no daily/historical
+endpoint on free tier), so the only way to build a daily series is to
+snapshot it ourselves. This change adds a Docker Hub fetch alongside
+the existing sources, includes it in `stats.json.sources.docker`, and
+rolls it into the displayed total. Failures are non-fatal — the
+workflow still updates with `docker: 0` if Docker Hub is unreachable.
+
+Verified the JS body end-to-end against a mock github SDK and a live
+Docker Hub call (11,298 pulls returned at time of validation). (e8afb67)
+
 ## [0.1.85-rc.12] - 2026-05-29
 
 
