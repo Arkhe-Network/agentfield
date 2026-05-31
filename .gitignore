@@ -64,3 +64,5 @@ reports/
 .env
 .plandb.db
 venv/
+arkhe-os/target/
+target/
