@@ -1,5 +1,3 @@
-// tools/checkpoint/src/main.rs
-
 fn main() {
-    println!("Checkpoint System: Salvando estado no IPFS...");
+    println!("Checkpointing ARKHE OS state to IPFS/Nostr...");
 }

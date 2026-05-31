@@ -1,7 +1,7 @@
 // kernel/src/scheduler.rs
 
 pub fn init() {
-    // Escalonador preemptivo com métrica de Theosis
+    // Escalonador preemptivo com fila multi-nível e métrica Theosis
 }
 
 pub fn get_theosis(pid: u32) -> usize {

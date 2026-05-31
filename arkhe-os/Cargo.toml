@@ -5,17 +5,9 @@ members = [
     "servers/vfs",
     "servers/net",
     "servers/package",
-    "libs/arklib",
-    "libs/pqc",
-    "libs/nostr",
-    "libs/ipfs",
-    "libs/tor",
+    "servers/passport",
+    "servers/orchestrator",
+    "servers/bindu",
     "tools/arkhe-sh",
     "tools/checkpoint"
 ]
-
-[profile.dev]
-panic = "abort"
-
-[profile.release]
-panic = "abort"

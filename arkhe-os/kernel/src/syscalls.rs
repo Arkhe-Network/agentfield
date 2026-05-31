@@ -1,8 +1,8 @@
 // kernel/src/syscalls.rs
 
-use crate::axiarchy;
-use crate::scheduler;
 use crate::temporal;
+use crate::scheduler;
+use crate::axiarchy;
 
 #[repr(usize)]
 pub enum Syscall {
@@ -23,6 +23,7 @@ pub enum Syscall {
     AxiarchyVerify = 0x954,
 }
 
+// Trampolim da syscall
 #[no_mangle]
 pub extern "C" fn syscall_handler(
     syscall_num: usize,
@@ -31,9 +32,18 @@ pub extern "C" fn syscall_handler(
     arg3: usize,
 ) -> usize {
     match syscall_num {
-        x if x == Syscall::AnchorProof as usize => temporal::anchor(arg1, arg2, arg3),
-        x if x == Syscall::ThesisGet as usize => scheduler::get_theosis(arg1 as u32),
-        x if x == Syscall::AxiarchyVerify as usize => axiarchy::verify_code(arg1),
+        // AnchorProof: arg1 = cid_ptr, arg2 = seal_ptr, arg3 = len
+        x if x == Syscall::AnchorProof as usize => {
+            temporal::anchor(arg1, arg2, arg3)
+        }
+        // ThesisGet: arg1 = pid
+        x if x == Syscall::ThesisGet as usize => {
+            scheduler::get_theosis(arg1 as u32)
+        }
+        // AxiarchyVerify: arg1 = code_hash_ptr
+        x if x == Syscall::AxiarchyVerify as usize => {
+            axiarchy::verify_code(arg1)
+        }
         _ => 0,
     }
 }

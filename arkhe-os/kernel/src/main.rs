@@ -3,17 +3,17 @@
 
 use core::panic::PanicInfo;
 
-mod axiarchy;
-mod ipc;
-mod isolation;
-mod memory;
-mod scheduler;
-mod syscalls;
-mod temporal;
+pub mod memory;
+pub mod scheduler;
+pub mod syscalls;
+pub mod ipc;
+pub mod isolation;
+pub mod temporal;
+pub mod axiarchy;
 
 #[no_mangle]
 pub extern "C" fn kmain() -> ! {
-    // Inicialização do kernel
+    // Initialize memory, scheduler, IPC, isolation, temporal chain, and axiarchy verifier.
     loop {}
 }
 

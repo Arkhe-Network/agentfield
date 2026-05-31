@@ -1,5 +1,4 @@
-// servers/package/src/main.rs
-
 fn main() {
-    println!("Package Server: Gerenciador ARKHE-EXEC inicializado.");
+    println!("Package Manager starting...");
+    // Gerenciador de Pacotes ARKHE-EXEC via IPFS
 }

@@ -1,5 +1,4 @@
-// servers/net/src/main.rs
-
 fn main() {
-    println!("Net Server: TCP/QUIC + Tor + NVPN inicializado.");
+    println!("Net Server starting...");
+    // Pilha de Rede: TCP/IP + QUIC + Tor + NVPN + Nostr relay + IPFS gateway
 }
