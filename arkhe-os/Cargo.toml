@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = [
+    "kernel",
+    "servers/vfs",
+    "servers/net",
+    "servers/package",
+    "servers/passport",
+    "servers/orchestrator",
+    "servers/bindu",
+    "tools/arkhe-sh",
+    "tools/checkpoint"
+]
