@@ -66,3 +66,4 @@ reports/
 venv/
 target/
 arkhe-os/target/
+test_env/
