@@ -136,23 +136,44 @@ class TheosisCollector:
     def _update_theosis(self):
         """Atualiza métricas de Theosis"""
         # Em produção, consultaria contrato Bridge ou API Catedral
-        # Simulação baseada em funções determinísticas
         now = time.time()
         seed = int(now / self.update_interval)
 
-        import random
-        random.seed(seed)
+        import os
+        import urllib.request
+        import json
 
-        self.theosis.level = round(0.3 + random.random() * 0.4, 4)
-        self.theosis.entropy = round(0.4 + random.random() * 0.3, 4)
-        self.theosis.circularity = round(random.random() * 0.02, 6)
-        self.theosis.resilience = round(0.85 + random.random() * 0.15, 4)
+        wormgraph_url = os.environ.get("WORMGRAPH_URL", "http://localhost:9090/theosis")
+        success = False
+
+        try:
+            req = urllib.request.Request(wormgraph_url, method="GET")
+            with urllib.request.urlopen(req, timeout=5) as response:
+                if response.status == 200:
+                    data = json.loads(response.read())
+                    self.theosis.level = float(data.get("level", 0.5))
+                    self.theosis.entropy = float(data.get("entropy", 0.5))
+                    self.theosis.circularity = float(data.get("circularity", 0.01))
+                    self.theosis.resilience = float(data.get("resilience", 0.9))
+                    success = True
+        except Exception as e:
+            # Fallback for when the real endpoint is unavailable
+            pass
+
+        if not success:
+            import random
+            random.seed(seed)
+            self.theosis.level = round(0.3 + random.random() * 0.4, 4)
+            self.theosis.entropy = round(0.4 + random.random() * 0.3, 4)
+            self.theosis.circularity = round(random.random() * 0.02, 6)
+            self.theosis.resilience = round(0.85 + random.random() * 0.15, 4)
+
         self.theosis.timestamp = now
         self.theosis.epoch = seed
 
         # Substrate seal determinístico
-        data = f"theosis:{seed}:{self.theosis.level}"
-        self.theosis.substrate_seal = "0x" + hashlib.sha3_256(data.encode()).hexdigest()
+        data_seal = f"theosis:{seed}:{self.theosis.level}"
+        self.theosis.substrate_seal = "0x" + hashlib.sha3_256(data_seal.encode()).hexdigest()
 
     def _update_bridge(self):
         """Atualiza métricas da Bridge"""

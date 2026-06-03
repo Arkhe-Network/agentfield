@@ -15,6 +15,10 @@ import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
  * @notice Ponte cross-chain entre RBB e ecossistema Catedral/ARKHE
  * @dev Implementa lock/mint com ancoragem temporal e tracking de Theosis
  */
+interface IRBB_Cathedral_Token {
+    function mint(address to, uint256 amount) external;
+}
+
 contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
     using ECDSA for bytes32;
 
@@ -57,6 +61,9 @@ contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
     // Chain IDs
     uint256 public constant RBB_CHAIN_ID = 12120014;
     uint256 public constant CATHEDRAL_CHAIN_ID = 923; // TemporalChain
+
+    // Token Contract
+    address public tokenContract;
 
     // Mappings
     mapping(bytes32 => Anchor) public anchors;
@@ -238,6 +245,11 @@ contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
     /**
      * @notice Executa mensagem recebida da Catedral (com validação de assinatura)
      */
+    function verifyPlonkProof(bytes calldata proof, bytes32 publicInput) internal pure returns (bool) {
+        // Stub implementation
+        return proof.length > 0 && publicInput != bytes32(0);
+    }
+
     function executeMessage(
         bytes32 _messageId,
         address _sender,
@@ -245,7 +257,8 @@ contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
         uint256 _amount,
         bytes calldata _payload,
         uint256 _sourceChainId,
-        bytes calldata _signature
+        bytes calldata _signature,
+        bytes calldata _proof
     ) external onlyRole(BRIDGE_OPERATOR) nonReentrant {
         require(!processedMessages[_messageId], "Bridge: mensagem já processada");
         require(_sourceChainId == CATHEDRAL_CHAIN_ID, "Bridge: source inválida");
@@ -262,9 +275,15 @@ contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
         bytes32 ethSignedHash = messageHash.toEthSignedMessageHash();
         address signer = ethSignedHash.recover(_signature);
         require(hasRole(BRIDGE_OPERATOR, signer), "Bridge: assinatura inválida");
+        require(verifyPlonkProof(_proof, messageHash), "Bridge: Invalid PLONK proof");
 
         // Mint tokens (simplificado - em produção usar contract de token)
         mintedBalances[_recipient] += _amount;
+
+        if (tokenContract != address(0)) {
+            IRBB_Cathedral_Token(tokenContract).mint(_recipient, _amount);
+        }
+
         processedMessages[_messageId] = true;
 
         emit MessageExecuted(_messageId, msg.sender, true);
@@ -322,6 +341,10 @@ contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
     }
 
     // ============ ADMIN ============
+    function setTokenContract(address _tokenContract) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        tokenContract = _tokenContract;
+    }
+
     function setAnchorInterval(uint256 _interval) external onlyRole(DEFAULT_ADMIN_ROLE) {
         anchorInterval = _interval;
     }
