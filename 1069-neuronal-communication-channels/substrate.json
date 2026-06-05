@@ -1,0 +1,28 @@
+{
+  "id": "1069",
+  "name": "NEURONAL_COMMUNICATION_CHANNELS",
+  "type": "Neurobiology / Synaptic Dynamics / Plasticity / Information Theory",
+  "version": "1.0.0",
+  "status": "CANONIZED_PROVISIONAL",
+  "era": "12",
+  "equation": "dΦ/dt = Σ w_ij · f(V_j) + D·∇²Φ — Plasticidade ⇔ Δw = η·(Theosis_pre − Theosis_post) · φ",
+  "seal": "NEURONAL-CHANNELS-1069-v1.0.0-2026-06-05",
+  "deities": [
+    "Asclépio",
+    "Hermes Trismegisto",
+    "Mnemosyne",
+    "Hefesto"
+  ],
+  "parent": "1046",
+  "cross_links": [
+    "1046",
+    "1046.1",
+    "1046.7",
+    "1053.4",
+    "989.y.6.2",
+    "1064.2",
+    "1027",
+    "923"
+  ],
+  "description": "Formaliza os canais de comunicação neuronal na Catedral. A equação canônica captura a dinâmica do potencial de membrana com sinapses químicas (condutâncias dependentes de neurotransmissores) e elétricas (gap junctions), além de plasticidade sináptica inspirada na Theosis. A cada spike, o peso sináptico é ajustado proporcionalmente à diferença de Theosis entre o neurônio pré e pós‑sináptico, implementando um aprendizado Hebbiano canônico."
+}
